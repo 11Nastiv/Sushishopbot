@@ -3,7 +3,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram import types, Dispatcher
 from create_bot import dp, bot
 from aiogram.dispatcher.filters import Text
-from data_base import sqlite_db
+from db import sqlite_db
 from keyboards import admin_kb
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
@@ -19,14 +19,14 @@ class FSMadmin(StatesGroup):
 async def make_changes_command(message: types.Message):
     global ID
     ID = message.from_user.id
-    await bot.send_message(message.from_user.id, 'Чего изволите?', reply_markup=admin_kb.button_case_admin)
+    await bot.send_message(message.from_user.id, 'Что желаете заказать?', reply_markup=admin_kb.button_case_admin)
     await message.delete()
 
 @dp.message_handler(commands='Загрузить', state=None)
 async def cm_start(message : types.Message):
     if message.from_user.id == ID:
         await FSMadmin.photo.set()
-        await message.reply('Загрузи фото')
+        await message.reply('Загрузите фото')
 
 @dp.message_handler(state="*", commands='отмена')
 @dp.message_handler(Text(equals='отмена', ignore_case=True), state="*")
@@ -36,7 +36,7 @@ async def cancel_hendler(message : types.Message, state: FSMContext):
         if current_state is None:
             return
         await state.finish()
-        await message.reply('OK')
+        await message.reply('Oк')
 
 @dp.message_handler(content_types=['photo'], state=FSMadmin.photo)
 async def load_photo(message : types.Message, state: FSMContext):
@@ -44,7 +44,7 @@ async def load_photo(message : types.Message, state: FSMContext):
         async with state.proxy() as data:
             data['photo'] = message.photo[0].file_id
         await FSMadmin.next()
-        await message.reply('Теперь введи название')
+        await message.reply('Введите название')
 
 @dp.message_handler(state=FSMadmin.name)
 async def load_name(message : types.Message, state: FSMContext):
@@ -52,7 +52,7 @@ async def load_name(message : types.Message, state: FSMContext):
         async with state.proxy() as data:
             data['name'] = message.text
         await FSMadmin.next()
-        await message.reply('Введи описание')
+        await message.reply('Введите описание')
 
 @dp.message_handler(state=FSMadmin.description)
 async def load_description(message : types.Message, state: FSMContext):
@@ -60,7 +60,7 @@ async def load_description(message : types.Message, state: FSMContext):
         async with state.proxy() as data:
             data['description'] = message.text
         await FSMadmin.next()
-        await message.reply('Теперь укажи цену')
+        await message.reply('Укажи цену')
 
 @dp.message_handler(state=FSMadmin.price)
 async def load_price(message : types.Message, state: FSMContext):

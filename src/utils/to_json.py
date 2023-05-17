@@ -1,5 +1,7 @@
 import json
 
+#file = 'cenz.txt'
+
 ar = []
 
 with open('cenz.txt', encoding='utf-8') as r:
@@ -8,5 +10,5 @@ with open('cenz.txt', encoding='utf-8') as r:
         if n !='':
             ar.append(n)
 
-with open('cenz.json', 'w', encoding='utf-8') as e:
-   json.dump(ar, e)
+with open('cenz.txt', 'w', encoding='utf-8') as e:
+    json.dump(ar, e)
