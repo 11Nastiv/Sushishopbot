@@ -1,14 +1,14 @@
 import json
 
-#file = 'cenz.txt'
+file = 'cenz.txt'
 
 ar = []
 
-with open('cenz.txt', encoding='utf-8') as r:
+with open(file, encoding='utf-8') as r:
     for i in r:
         n = i.lower().split('\n')[0]
         if n !='':
             ar.append(n)
 
-with open('cenz.txt', 'w', encoding='utf-8') as e:
+with open(file, 'w', encoding='utf-8') as e:
     json.dump(ar, e)
