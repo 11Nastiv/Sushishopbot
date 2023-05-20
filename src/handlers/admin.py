@@ -85,8 +85,6 @@ async def delete_item(message: types.Message):
             await bot.send_message(message.from_user.id, text='^^^', reply_markup=InlineKeyboardMarkup().\
                 add(InlineKeyboardButton(f'Удалить {ret[1]}', callback_data=f'del {ret[1]}')))
 
-
-
 def register_handlers_admin(dp : Dispatcher):
     dp.register_message_handler(cm_start, commands='Загрузить', state=None)
     dp.register_message_handler(cancel_hendler, Text(equals='отмена', ignore_case=True),state="*")
